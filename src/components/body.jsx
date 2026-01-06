@@ -15,10 +15,20 @@ function Body({ children }) {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        margin: '0',
+        padding: '0',
       }}
     >
       <Titlebar />
-      <div style={{ zIndex: 1 }}>
+      <div style={{ 
+        zIndex: 1, 
+        margin: '0', 
+        padding: '0', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+      }}>
         {children}
       </div>
       <div
