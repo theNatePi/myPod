@@ -23,27 +23,38 @@ function NavButton({ children, margin }) {
 
 function NavCircle() {
   return (
-    <div
-      style={{
-        borderRadius: '50%',
-        border: '50px solid #D7D7D7',
-        width: '80px',
-        height: '80px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <NavButton margin="0 0 125px 0"><p style={{ fontSize: '18px', fontWeight: '700', color: 'var(--font-color-primary)' }}>MENU</p></NavButton>
-      <NavButton margin="0 0 -125px 0">
-        <PlayButton style={{ width: '35px', height: '35px', marginLeft: '-4px', marginTop: '5px' }} />
-      </NavButton>
-      <NavButton margin="0 0 0 -130px">
-        <SkipBackButton style={{ width: '35px', height: '35px', marginLeft: '5px' }} />
-      </NavButton>
-      <NavButton margin="0 0 0 130px">
-        <SkipForwardButton style={{ width: '35px', height: '35px', marginLeft: '-5px' }} />
-      </NavButton>
+    <div style={{
+      borderRadius: '50%',
+      padding: '2px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'linear-gradient(135deg, #FFFFFF1E 0%, #FFFFFF1E 25%, #0B1D3D32 75%, #0B1D3D32 100%)',
+      maskImage: 'radial-gradient(circle, transparent 38px, black 38px)',
+      WebkitMaskImage: 'radial-gradient(circle, transparent 38px, black 38px)',
+    }}>
+      <div
+        style={{
+          borderRadius: '50%',
+          border: '40px solid var(--background-color-primary)',
+          width: '80px',
+          height: '80px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <NavButton margin="0 0 115px 0"><p style={{ fontSize: '15px', fontWeight: '700', color: 'var(--font-color-primary)' }}>MENU</p></NavButton>
+        <NavButton margin="0 0 -115px 0">
+          <PlayButton style={{ width: '30px', height: '30px', marginLeft: '-4px', marginTop: '5px' }} />
+        </NavButton>
+        <NavButton margin="0 0 0 -120px">
+          <SkipBackButton style={{ width: '30px', height: '30px', marginLeft: '5px' }} />
+        </NavButton>
+        <NavButton margin="0 0 0 120px">
+          <SkipForwardButton style={{ width: '30px', height: '30px', marginLeft: '-4px' }} />
+        </NavButton>
+      </div>
     </div>
   )
 }
