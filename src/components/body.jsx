@@ -11,15 +11,25 @@ function Body({ children }) {
         height: '100vh',
         background: 'linear-gradient(270deg, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0.00) 27.88%, rgba(0, 0, 0, 0.00) 71.15%, rgba(0, 0, 0, 0.30) 100%), linear-gradient(180deg, #325BA1 0%, #194082 100%)',
         position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
+      <Titlebar />
+      {children}
       <div
         style={{
           position: 'absolute',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
           top: 0,
           left: 0,
-          width: '100%',
-          height: '100%',
+          width: '100vw',
+          height: '100vh',
           backgroundImage: grainPattern,
           backgroundSize: '200px 200px',
           opacity: 0.6,
@@ -27,8 +37,6 @@ function Body({ children }) {
           mixBlendMode: 'overlay',
         }}
       />
-      <Titlebar />
-      {children}
     </div>
   );
 }
