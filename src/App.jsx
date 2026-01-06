@@ -5,7 +5,8 @@ function App() {
   return (
     <>
       <div>
-        <Body />
+        <Body>
+        </Body>
       </div>
     </>
   )

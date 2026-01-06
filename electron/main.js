@@ -30,9 +30,14 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 200,
     height: 416,
+    frame: false,
+
+    // titleBarStyle: 'hidden',
+    // ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {}),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
+    resizable: false,
   });
 
   mainWindow.loadURL("http://localhost:5173");
