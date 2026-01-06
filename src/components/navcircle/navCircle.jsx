@@ -29,7 +29,7 @@ function NavCircle() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'linear-gradient(135deg, #FFFFFF1E 0%, #FFFFFF1E 25%, #0B1D3D32 75%, #0B1D3D32 100%)',
+      background: 'linear-gradient(135deg,rgba(255, 255, 255, 0.4) 0%,rgba(255, 255, 255, 0.4) 25%,rgba(11, 29, 61, 0.2) 75%,rgba(11, 29, 61, 0.) 100%)',
       maskImage: 'radial-gradient(circle, transparent 38px, black 38px)',
       WebkitMaskImage: 'radial-gradient(circle, transparent 38px, black 38px)',
     }}>

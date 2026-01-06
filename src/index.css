@@ -13,7 +13,14 @@
   -moz-osx-font-smoothing: grayscale;
 
   --font-color-primary: #4A4949;
-  --background-color-primary: #D9D9D9;
+  --background-color-primary: #c6c6c6;
+  --border-color-primary: #696969;
+  --primary-font-family: 'SF Pro Rounded';
+}
+
+p {
+  margin: 0;
+  padding: 0;
 }
 
 a {
