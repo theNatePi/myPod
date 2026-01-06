@@ -18,7 +18,9 @@ function Body({ children }) {
       }}
     >
       <Titlebar />
-      {children}
+      <div style={{ zIndex: 1 }}>
+        {children}
+      </div>
       <div
         style={{
           position: 'absolute',
@@ -35,6 +37,7 @@ function Body({ children }) {
           opacity: 0.6,
           pointerEvents: 'none',
           mixBlendMode: 'overlay',
+          zIndex: 0,
         }}
       />
     </div>

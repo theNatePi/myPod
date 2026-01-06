@@ -1,3 +1,7 @@
+import SkipBackButton from './../../assets/skip-back-button.svg?react';
+import SkipForwardButton from './../../assets/skip-forward-button.svg?react';
+import PlayButton from './../../assets/play-pause-button.svg?react';
+
 function NavButton({ children, margin }) {
   return (
     <button style={{
@@ -30,10 +34,16 @@ function NavCircle() {
         justifyContent: 'center',
       }}
     >
-      <NavButton margin="0 0 125px 0">MENU</NavButton>
-      <NavButton margin="0 0 -125px 0">hi</NavButton>
-      <NavButton margin="0 0 0 -130px">hi</NavButton>
-      <NavButton margin="0 0 0 130px">hi</NavButton>
+      <NavButton margin="0 0 125px 0"><p style={{ fontSize: '18px', fontWeight: '700', color: 'var(--font-color-primary)' }}>MENU</p></NavButton>
+      <NavButton margin="0 0 -125px 0">
+        <PlayButton style={{ width: '35px', height: '35px', marginLeft: '-4px', marginTop: '5px' }} />
+      </NavButton>
+      <NavButton margin="0 0 0 -130px">
+        <SkipBackButton style={{ width: '35px', height: '35px', marginLeft: '5px' }} />
+      </NavButton>
+      <NavButton margin="0 0 0 130px">
+        <SkipForwardButton style={{ width: '35px', height: '35px', marginLeft: '-5px' }} />
+      </NavButton>
     </div>
   )
 }
