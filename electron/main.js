@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
+require("./ipc");
 
 let isQuitting = false;
 let mainWindow = null;
@@ -36,6 +37,8 @@ function createWindow() {
     // ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {}),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
+      contextIsolation: true,
+      nodeIntegration: false,
     },
     resizable: false,
   });

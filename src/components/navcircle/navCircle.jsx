@@ -21,7 +21,7 @@ function NavButton({ children, margin }) {
   )
 }
 
-function NavCircle() {
+function NavCircle({ setCurrentScreen }) {
   return (
     <div style={{
       borderRadius: '50%',
@@ -44,7 +44,11 @@ function NavCircle() {
           justifyContent: 'center',
         }}
       >
-        <NavButton margin="0 0 115px 0"><p style={{ fontSize: '15px', fontWeight: '700', color: 'var(--font-color-primary)' }}>MENU</p></NavButton>
+        <NavButton margin="0 0 115px 0">
+          <p style={{ fontSize: '15px', fontWeight: '700', color: 'var(--font-color-primary)' }} onClick={() => setCurrentScreen('home')}>
+            MENU
+          </p>
+        </NavButton>
         <NavButton margin="0 0 -115px 0">
           <PlayButton style={{ width: '30px', height: '30px', marginLeft: '-4px', marginTop: '5px' }} />
         </NavButton>
