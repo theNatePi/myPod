@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 require("./ipc");
+require("./keybinds");
 
 let isQuitting = false;
 let mainWindow = null;
@@ -25,16 +26,14 @@ app.on('window-all-closed', () => {
     // Also quit when window is closed normally
     app.quit();
   }
-})
+});
 
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 200,
     height: 480,
     frame: false,
-
-    // titleBarStyle: 'hidden',
-    // ...(process.platform !== 'darwin' ? { titleBarOverlay: true } : {}),
+    title: 'myPod',
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -56,7 +55,11 @@ function createWindow() {
   });
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
+  const { setupKeybinds } = require('./keybinds');
+  setupKeybinds();
+});
 
 // Reopen window when dock icon is clicked on macOS
 app.on('activate', () => {
