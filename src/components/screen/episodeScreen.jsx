@@ -63,7 +63,7 @@ function EpisodeScreen({ selectedEpisode, playbackControls }) {
           height: '120px',
           objectFit: 'cover',
           borderRadius: '4px',
-          marginTop: '-5px',
+          marginTop: '8px',
         }}
         src={selectedEpisode?.image} 
       />
@@ -73,33 +73,55 @@ function EpisodeScreen({ selectedEpisode, playbackControls }) {
         style={{ width: '100%', height: '100%', display: 'none' }} 
         autoPlay
       />
-      <p
+      <div
         style={{
-          fontFamily: 'var(--primary-font-family)',
-          fontSize: '11px',
-          fontWeight: '700',
-          color: 'var(--font-color-primary)',
-          width: '80%',
-          lineHeight: '1.2',
-          margin: '5px 0 1px 0',
+          width: '100%',
+          height: '32%',
+          // background: 'red',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'space-between',
         }}
       >
-        {selectedEpisode?.title?.length > 40
-          ? `${selectedEpisode.title.substring(0, 40)}...` 
-          : selectedEpisode?.title}
-      </p>
-      <p
-        style={{
-          fontFamily: 'var(--secondary-font-family)',
-          fontSize: '9px',
-          fontWeight: '500',
-          color: 'var(--font-color-primary)',
-          width: '80%',
-        }}
-      >
-        {selectedEpisode?.pubDate?.toLocaleDateString()}
-      </p>
-      <PlayerBar playbackControls={playbackControls} />
+        <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'start',
+          }}
+        >
+          <p
+            style={{
+              fontFamily: 'var(--primary-font-family)',
+              fontSize: '11px',
+              fontWeight: '700',
+              color: 'var(--font-color-primary)',
+              width: '80%',
+              lineHeight: '1.2',
+              margin: '10px 0 1px 0',
+            }}
+          >
+            {selectedEpisode?.title?.length > 40
+              ? `${selectedEpisode.title.substring(0, 40)}...` 
+              : selectedEpisode?.title}
+          </p>
+          <p
+            style={{
+              fontFamily: 'var(--secondary-font-family)',
+              fontSize: '9px',
+              fontWeight: '500',
+              color: 'var(--font-color-primary)',
+              width: '80%',
+            }}
+          >
+            {selectedEpisode?.pubDate?.toLocaleDateString()}
+          </p>
+        </div>
+        <PlayerBar playbackControls={playbackControls} />
+      </div>
     </div>
   )
 }

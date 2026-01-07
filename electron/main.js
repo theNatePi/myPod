@@ -30,7 +30,7 @@ app.on('window-all-closed', () => {
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 200,
-    height: 450,
+    height: 480,
     frame: false,
 
     // titleBarStyle: 'hidden',

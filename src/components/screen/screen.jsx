@@ -8,7 +8,7 @@ function Screen({ currentScreen, setCurrentScreen, selectedPodcast, setSelectedP
     <div
       style={{
         width: '168px',
-        height: '215px',
+        height: '250px',
         padding: '6px',
         background: 'linear-gradient(270deg, #6F6F6F 0%, #B6B6B6 27.88%, #B6B6B6 71.15%, #6F6F6F 100%)',
         marginBottom: '20px',
