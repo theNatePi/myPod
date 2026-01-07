@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import './App.css'
 import Body from './components/body'
 import NavCircle from './components/navcircle/navCircle'
-import Screen from './components/screen/screen'
+import Screen from './components/screens/screen'
 import { usePlaybackControls } from './hooks/usePlaybackControls'
 
 function App() {
