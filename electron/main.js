@@ -40,7 +40,7 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
     },
-    resizable: false,
+    resizable: false
   });
 
   mainWindow.loadURL("http://localhost:5173");

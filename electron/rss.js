@@ -16,16 +16,20 @@ function normalizeFeed(feed, feedUrl) {
     image: feed.itunes?.image || feed.image?.url,
     author: feed.itunes?.author,
     link: feed.link,
-    episodes: feed.items.map(normalizeEpisode),
+    episodes: feed.items.map(item => normalizeEpisode(item, feed)),
   };
 }
 
-function normalizeEpisode(item) {
+function normalizeEpisode(item, feed) {
+  // Helper to get first non-undefined value
+  const firstDefined = (...values) => values.find(v => v !== undefined);
+  
   return {
     id: item.guid || item.id,
     title: item.title,
     description: item.contentSnippet || item.content,
     audioUrl: item.enclosure?.url,
+    image: firstDefined(item.itunes?.image, item.image?.url, feed.itunes?.image, feed.image?.url),
     duration: item.itunes?.duration,
     pubDate: new Date(item.pubDate),
   };

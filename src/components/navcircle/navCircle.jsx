@@ -2,26 +2,46 @@ import SkipBackButton from './../../assets/skip-back-button.svg?react';
 import SkipForwardButton from './../../assets/skip-forward-button.svg?react';
 import PlayButton from './../../assets/play-pause-button.svg?react';
 
-function NavButton({ children, margin }) {
+function NavButton({ children, margin, onClick }) {
   return (
-    <button style={{
-      borderRadius: '50%',
-      width: '70px',
-      height: '70px',
-      padding: '0',
-      outline: 'none',
-      border: 'none',
-      background: 'transparent',
-      cursor: 'pointer',
-      position: 'absolute',
-      margin: margin,
-    }}>
+    <button 
+      onClick={onClick}
+      style={{
+        borderRadius: '50%',
+        width: '70px',
+        height: '70px',
+        padding: '0',
+        outline: 'none',
+        border: 'none',
+        background: 'transparent',
+        cursor: 'pointer',
+        position: 'absolute',
+        margin: margin,
+      }}>
       {children}
     </button>
   )
 }
 
-function NavCircle({ setCurrentScreen }) {
+function NavCircle({ currentScreen, setCurrentScreen, playbackControls }) {
+  const handlePlayPause = () => {
+    if (playbackControls) {
+      playbackControls.togglePlayPause();
+    }
+  };
+
+  const handleSkipForward = () => {
+    if (playbackControls) {
+      playbackControls.skipForward(10);
+    }
+  };
+
+  const handleSkipBackward = () => {
+    if (playbackControls) {
+      playbackControls.skipBackward(10);
+    }
+  };
+
   return (
     <div style={{
       borderRadius: '50%',
@@ -45,17 +65,17 @@ function NavCircle({ setCurrentScreen }) {
         }}
       >
         <NavButton margin="0 0 115px 0">
-          <p style={{ fontSize: '15px', fontWeight: '700', color: 'var(--font-color-primary)' }} onClick={() => setCurrentScreen('home')}>
+          <p style={{ fontSize: '15px', fontWeight: '700', color: 'var(--font-color-primary)' }} onClick={() => currentScreen === 'episode' ? setCurrentScreen('podcast') : setCurrentScreen('home')}>
             MENU
           </p>
         </NavButton>
-        <NavButton margin="0 0 -115px 0">
+        <NavButton margin="0 0 -115px 0" onClick={handlePlayPause}>
           <PlayButton style={{ width: '30px', height: '30px', marginLeft: '-4px', marginTop: '5px' }} />
         </NavButton>
-        <NavButton margin="0 0 0 -120px">
+        <NavButton margin="0 0 0 -120px" onClick={handleSkipBackward}>
           <SkipBackButton style={{ width: '30px', height: '30px', marginLeft: '5px' }} />
         </NavButton>
-        <NavButton margin="0 0 0 120px">
+        <NavButton margin="0 0 0 120px" onClick={handleSkipForward}>
           <SkipForwardButton style={{ width: '30px', height: '30px', marginLeft: '-4px' }} />
         </NavButton>
       </div>

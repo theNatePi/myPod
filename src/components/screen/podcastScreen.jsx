@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ListItem } from './screenComponents';
 
-function PodcastScreen({ selectedPodcast, rssUrls }) {
+function PodcastScreen({ setCurrentScreen, selectedPodcast, rssUrls, setSelectedEpisode }) {
   const feedUrl = rssUrls[selectedPodcast];
   const [episodes, setEpisodes] = useState([]);
   const [feedInfo, setFeedInfo] = useState(null);
@@ -20,7 +20,8 @@ function PodcastScreen({ selectedPodcast, rssUrls }) {
           prevIndex < episodes.length - 1 ? prevIndex + 1 : prevIndex
         );
       } else if (event.key === 'Enter') {
-        episodes[selectedEpisodeIndex].onClick();
+        setSelectedEpisode(episodes[selectedEpisodeIndex]);
+        setCurrentScreen('episode');
       }
     };
 
@@ -105,7 +106,7 @@ function PodcastScreen({ selectedPodcast, rssUrls }) {
       {episodes.length > 0 && (
         <div style={{ width: '100%' }}>
           {episodes.map((episode, index) => (
-            <ListItem key={episode.id} text={episode.title} onClick={() => {}} isSelected={index === selectedEpisodeIndex} />
+            <ListItem key={episode.id} text={episode.title} onClick={() => { setSelectedEpisode(episode); setCurrentScreen('episode'); }} isSelected={index === selectedEpisodeIndex} />
           ))}
         </div>
       )}
