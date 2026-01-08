@@ -117,6 +117,17 @@ export function usePlaybackControls() {
       setDuration(0);
       audioRef.current.src = episode.audioUrl;
       audioRef.current.load();
+      
+      // Start playing once the audio is ready
+      const handleCanPlay = () => {
+        audioRef.current.play().catch((error) => {
+          // Handle autoplay restrictions or other play errors
+          console.warn('Failed to auto-play audio:', error);
+        });
+        audioRef.current.removeEventListener('canplay', handleCanPlay);
+      };
+      
+      audioRef.current.addEventListener('canplay', handleCanPlay, { once: true });
     }
   };
 

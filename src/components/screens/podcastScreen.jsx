@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { ListItem } from './screenComponents';
+import LoadingScreen from './loadingScreen';
 
 function PodcastScreen({ setCurrentScreen, selectedPodcast, rssUrls, setSelectedEpisode }) {
+  const [isLoading, setIsLoading] = useState(true);
+
   const feedUrl = rssUrls[selectedPodcast];
   const [episodes, setEpisodes] = useState([]);
   const [feedInfo, setFeedInfo] = useState(null);
@@ -60,6 +63,8 @@ function PodcastScreen({ setCurrentScreen, selectedPodcast, rssUrls, setSelected
         }
       } catch (error) {
         console.error('Error fetching episodes:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
     
@@ -69,48 +74,53 @@ function PodcastScreen({ setCurrentScreen, selectedPodcast, rssUrls, setSelected
   }, [feedUrl]);
 
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'start',
-      }}
-    >
-      <div style={{ width: '100%' }}>
-        <p 
-          style={{ 
-            margin: '5px 0 0 8px', 
-            padding: '0', 
-            fontFamily: 'var(--secondary-font-family)', 
-            fontSize: '15px', 
-            fontWeight: '750', 
-            color: 'var(--font-color-primary)',
-            marginLeft: '10px' 
+    <>
+      {isLoading && <LoadingScreen />}
+      {!isLoading && (
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'start',
           }}
         >
-          {feedInfo?.title || selectedPodcast}
-        </p>
-        <div 
-          style={{ 
-            height: '1px', 
-            backgroundColor: 'var(--border-color-primary)', 
-            width: '100%', 
-            marginTop: '4px',
-            marginBottom: '0px',
-          }}
-        />
+          <div style={{ width: '100%' }}>
+            <p 
+              style={{ 
+                margin: '5px 0 0 8px', 
+                padding: '0', 
+                fontFamily: 'var(--secondary-font-family)', 
+                fontSize: '15px', 
+                fontWeight: '750', 
+                color: 'var(--font-color-primary)',
+                marginLeft: '10px' 
+              }}
+            >
+              {feedInfo?.title || selectedPodcast}
+            </p>
+            <div 
+              style={{ 
+                height: '1px', 
+                backgroundColor: 'var(--border-color-primary)', 
+                width: '100%', 
+                marginTop: '4px',
+                marginBottom: '0px',
+              }}
+            />
+          </div>
+          {episodes.length > 0 && (
+            <div style={{ width: '100%' }}>
+              {episodes.map((episode, index) => (
+                <ListItem key={episode.id} text={episode.title} onClick={() => { setSelectedEpisode(episode); setCurrentScreen('episode'); }} isSelected={index === selectedEpisodeIndex} />
+              ))}
+            </div>
+        )}
       </div>
-      {episodes.length > 0 && (
-        <div style={{ width: '100%' }}>
-          {episodes.map((episode, index) => (
-            <ListItem key={episode.id} text={episode.title} onClick={() => { setSelectedEpisode(episode); setCurrentScreen('episode'); }} isSelected={index === selectedEpisodeIndex} />
-          ))}
-        </div>
       )}
-    </div>
+    </>
   )
 }
 

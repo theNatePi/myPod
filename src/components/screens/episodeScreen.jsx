@@ -1,49 +1,80 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import LoadingScreen from './loadingScreen';
 
 function PlayerBar({ playbackControls }) {
   const [isHovered, setIsHovered] = useState(false);
+  
+  const isLoading = (playbackControls?.formattedCurrentTime || '0:00') === '0:00' && 
+                    (playbackControls?.formattedDuration || '0:00') === '0:00';
 
   return (
-    <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{
-        // width: '90%',
-        height: '15px',
-        margin: '5px 0 1px 0',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <p style={{ fontFamily: 'var(--primary-font-family)', fontSize: '9px', fontWeight: '500', color: 'var(--font-color-primary)', width: '30px' }}>
-        {playbackControls?.formattedCurrentTime || '0:00'}
-      </p>
+    <>
+      <style jsx>{`
+        @keyframes loadingGlide {
+          0% {
+            background-position: 200% 0;
+          }
+          100% {
+            background-position: -400% 0;
+          }
+        }
+      `}</style>
       <div
-        style={{ 
-          width: '80px', 
-          height: '8px', 
-          background: 'linear-gradient(180deg, #FFF 0%, #999 100%)',
-          margin: '0 5px' 
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={{
+          // width: '90%',
+          height: '15px',
+          margin: '5px 0 1px 0',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        <div 
+        <p style={{ fontFamily: 'var(--primary-font-family)', fontSize: '9px', fontWeight: '500', color: 'var(--font-color-primary)', width: '30px' }}>
+          {playbackControls?.formattedCurrentTime || '0:00'}
+        </p>
+        <div
           style={{ 
-            width: `${(playbackControls?.currentTime / playbackControls?.duration) * 100}%`, 
+            width: '80px', 
             height: '8px', 
-            background: 'linear-gradient(180deg, #1B90CB 0%, #0C4867 100%)',
-          }} 
-        />
+            background: 'linear-gradient(180deg, #FFF 0%, #999 100%)',
+            margin: '0 5px',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          {isLoading ? (
+            <div 
+              style={{ 
+                width: '100%',
+                height: '8px', 
+                background: 'linear-gradient(90deg,  transparent 0%, #1B90CB 50%, #0C4867 100%)',
+                backgroundSize: '200% 100%',
+                animation: 'loadingGlide 2s ease-in-out infinite',
+              }} 
+            />
+          ) : (
+            <div 
+              style={{ 
+                width: `${(playbackControls?.currentTime / playbackControls?.duration) * 100}%`, 
+                height: '8px', 
+                background: 'linear-gradient(180deg, #1B90CB 0%, #0C4867 100%)',
+              }} 
+            />
+          )}
+        </div>
+        <p style={{ fontFamily: 'var(--primary-font-family)', fontSize: '9px', fontWeight: '500', color: 'var(--font-color-primary)', width: '30px' }}>
+          {playbackControls?.formattedDuration || '0:00'}
+        </p>
       </div>
-      <p style={{ fontFamily: 'var(--primary-font-family)', fontSize: '9px', fontWeight: '500', color: 'var(--font-color-primary)', width: '30px' }}>
-        {playbackControls?.formattedDuration || '0:00'}
-      </p>
-    </div>
+    </>
   )
 }
 
 function EpisodeScreen({ selectedEpisode, playbackControls }) {
+
   return (
     <div
       style={{
@@ -71,7 +102,6 @@ function EpisodeScreen({ selectedEpisode, playbackControls }) {
       <audio 
         ref={playbackControls?.audioRef}
         style={{ width: '100%', height: '100%', display: 'none' }} 
-        autoPlay
       />
       <div
         style={{

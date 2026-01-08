@@ -1,15 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { ListItem } from './screenComponents';
 
-function HomeScreen({ setCurrentScreen, setSelectedPodcast }) {
+function HomeScreen({ podcasts }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
-
-  const listItems = useMemo(() => [
-    { text: '+ Add Podcast', onClick: () => {} },
-    { text: 'The Yard', onClick: () => { setCurrentScreen('podcast'); setSelectedPodcast('The Yard'); } },
-    { text: 'WAN Show', onClick: () => { setCurrentScreen('podcast'); setSelectedPodcast('WAN Show'); } },
-    { text: 'Waveform', onClick: () => { setCurrentScreen('podcast'); setSelectedPodcast('Waveform'); } }
-  ], [setCurrentScreen, setSelectedPodcast]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -21,10 +14,10 @@ function HomeScreen({ setCurrentScreen, setSelectedPodcast }) {
       } else if (event.key === 'ArrowDown') {
         event.preventDefault();
         setSelectedIndex((prevIndex) => 
-          prevIndex < listItems.length - 1 ? prevIndex + 1 : prevIndex
+          prevIndex < podcasts.length - 1 ? prevIndex + 1 : prevIndex
         );
       } else if (event.key === 'Enter') {
-        listItems[selectedIndex].onClick();
+        podcasts[selectedIndex].onClick();
       }
     };
 
@@ -33,7 +26,7 @@ function HomeScreen({ setCurrentScreen, setSelectedPodcast }) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [listItems, selectedIndex]);
+  }, [podcasts, selectedIndex]);
 
   return (
     <div
@@ -70,7 +63,7 @@ function HomeScreen({ setCurrentScreen, setSelectedPodcast }) {
           }} 
         />
       </div>
-      {listItems.map((item, index) => (
+      {podcasts.map((item, index) => (
         <ListItem key={item.text} text={item.text} onClick={item.onClick} isSelected={selectedIndex === index} />
       ))}
     </div>

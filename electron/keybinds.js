@@ -14,11 +14,14 @@ function setupKeybinds() {
       label: 'Pin On Top',
       type: 'checkbox',
       checked: false,
-      click: () => {
+      click: (menuItem) => {
         const focusedWindow = BrowserWindow.getFocusedWindow();
         if (focusedWindow) {
-          focusedWindow.setAlwaysOnTop(!focusedWindow.isAlwaysOnTop());
-          submenu.checked = focusedWindow.isAlwaysOnTop();
+          const newState = !focusedWindow.isAlwaysOnTop();
+          focusedWindow.setAlwaysOnTop(newState);
+          menuItem.checked = newState;
+          // Notify renderer process of the change
+          focusedWindow.webContents.send('windowData:alwaysOnTopChanged', newState);
         }
       },
       accelerator: 'CommandOrControl+Shift+P'

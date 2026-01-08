@@ -2,8 +2,16 @@ import TimeBar from './timeBar';
 import HomeScreen from './homeScreen';
 import PodcastScreen from './podcastScreen';
 import EpisodeScreen from './episodeScreen';
+import { useMemo } from 'react';
 
 function Screen({ currentScreen, setCurrentScreen, selectedPodcast, setSelectedPodcast, rssUrls, selectedEpisode, setSelectedEpisode, playbackControls }) {
+  const listItems = useMemo(() => [
+    { text: '+ Add Podcast', onClick: () => {} },
+    { text: 'The Yard', onClick: () => { setCurrentScreen('podcast'); setSelectedPodcast('The Yard'); } },
+    { text: 'WAN Show', onClick: () => { setCurrentScreen('podcast'); setSelectedPodcast('WAN Show'); } },
+    { text: 'Waveform', onClick: () => { setCurrentScreen('podcast'); setSelectedPodcast('Waveform'); } }
+  ], [setCurrentScreen, setSelectedPodcast]);
+  
   return (
     <div
       style={{
@@ -32,7 +40,7 @@ function Screen({ currentScreen, setCurrentScreen, selectedPodcast, setSelectedP
       >
         <TimeBar />
         <div style={{ overflowY: currentScreen === 'episode' ? 'hidden' : 'auto', scrollbarWidth: 'none', width: '100%', height: '100%' }}>
-          {currentScreen === 'home' && <HomeScreen setCurrentScreen={setCurrentScreen} setSelectedPodcast={setSelectedPodcast} />}
+          {currentScreen === 'home' && <HomeScreen podcasts={listItems} />}
           {currentScreen === 'podcast' && <PodcastScreen setCurrentScreen={setCurrentScreen} selectedPodcast={selectedPodcast} rssUrls={rssUrls} setSelectedEpisode={setSelectedEpisode} />}
           {currentScreen === 'episode' && <EpisodeScreen selectedEpisode={selectedEpisode} playbackControls={playbackControls} />}
         </div>

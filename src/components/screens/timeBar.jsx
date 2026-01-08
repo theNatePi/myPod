@@ -1,8 +1,29 @@
 import { useState, useEffect } from 'react';
 import BatteryIcon from './../../assets/battery.svg?react';
+import PinIcon from './../../assets/pin.svg?react';
 
 function TimeBar() {
   const [currentTime, setCurrentTime] = useState('');
+  const [isAlwaysOnTop, setIsAlwaysOnTop] = useState(false);
+  useEffect(() => {
+    const checkAlwaysOnTop = async () => {
+      const isAlwaysOnTop = await window.windowData.isAlwaysOnTop();
+      setIsAlwaysOnTop(isAlwaysOnTop);
+    };
+    
+    // Check initially
+    checkAlwaysOnTop();
+    
+    // Listen for always-on-top state changes from main process
+    const handleAlwaysOnTopChanged = (event, isAlwaysOnTop) => {
+      setIsAlwaysOnTop(isAlwaysOnTop);
+    };
+    
+    // Listen for IPC events from main process
+    if (window.windowData?.onAlwaysOnTopChanged) {
+      window.windowData.onAlwaysOnTopChanged(handleAlwaysOnTopChanged);
+    }
+  }, []);
 
   useEffect(() => {
     const updateTime = () => {
@@ -47,7 +68,18 @@ function TimeBar() {
         width: '90%',
       }}>
         <p style={{ fontFamily: 'var(--primary-font-family)', fontSize: '9.6px', fontWeight: '700', color: 'var(--font-color-primary)' }}>{currentTime}</p>
-        <BatteryIcon style={{ width: '25px', height: '25px' }} />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '5px',
+          }}
+        >
+          {isAlwaysOnTop ? <PinIcon style={{ width: '10px', height: '10px' }} /> : null}
+          <BatteryIcon style={{ width: '25px', height: '25px' }} />
+        </div>
       </div>
     </div>
   )
