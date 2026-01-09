@@ -1,11 +1,63 @@
-import { useState, useEffect, useRef } from 'react';
-import LoadingScreen from './loadingScreen';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import ScubberIcon from './../../assets/scrub-icon.svg?react';
 
 function PlayerBar({ playbackControls }) {
   const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragPercentage, setDragPercentage] = useState(null);
+  const progressBarRef = useRef(null);
   
   const isLoading = (playbackControls?.formattedCurrentTime || '0:00') === '0:00' && 
                     (playbackControls?.formattedDuration || '0:00') === '0:00';
+
+  const handleSeek = useCallback((clientX) => {
+    if (!progressBarRef.current || !playbackControls?.seek || !playbackControls?.duration) return;
+    
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, x / rect.width));
+    const newTime = percentage * playbackControls.duration;
+    
+    // Update visual position immediately
+    setDragPercentage(percentage);
+    
+    // Update audio position
+    playbackControls.seek(newTime);
+  }, [playbackControls]);
+
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+    handleSeek(e.clientX);
+  };
+
+  // Add global mouse event listeners for dragging
+  useEffect(() => {
+    if (isDragging) {
+      const handleGlobalMouseMove = (e) => {
+        handleSeek(e.clientX);
+      };
+      const handleGlobalMouseUp = () => {
+        setIsDragging(false);
+        setDragPercentage(null);
+      };
+      
+      window.addEventListener('mousemove', handleGlobalMouseMove);
+      window.addEventListener('mouseup', handleGlobalMouseUp);
+      
+      return () => {
+        window.removeEventListener('mousemove', handleGlobalMouseMove);
+        window.removeEventListener('mouseup', handleGlobalMouseUp);
+      };
+    }
+  }, [isDragging, handleSeek]);
+
+  // Calculate the current progress percentage
+  const progressPercentage = dragPercentage !== null 
+    ? dragPercentage * 100 
+    : playbackControls?.duration 
+      ? (playbackControls.currentTime / playbackControls.duration) * 100 
+      : 0;
 
   return (
     <>
@@ -36,13 +88,16 @@ function PlayerBar({ playbackControls }) {
           {playbackControls?.formattedCurrentTime || '0:00'}
         </p>
         <div
+          ref={progressBarRef}
+          onMouseDown={handleMouseDown}
           style={{ 
             width: '80px', 
             height: '8px', 
             background: 'linear-gradient(180deg, #FFF 0%, #999 100%)',
             margin: '0 5px',
             position: 'relative',
-            overflow: 'hidden',
+            overflow: 'visible',
+            cursor: 'pointer',
           }}
         >
           {isLoading ? (
@@ -56,13 +111,40 @@ function PlayerBar({ playbackControls }) {
               }} 
             />
           ) : (
+            <>
             <div 
               style={{ 
-                width: `${(playbackControls?.currentTime / playbackControls?.duration) * 100}%`, 
+                width: `${progressPercentage}%`, 
                 height: '8px', 
                 background: 'linear-gradient(180deg, #1B90CB 0%, #0C4867 100%)',
-              }} 
-            />
+                padding: '0'
+              }}
+            >
+              
+            </div>
+            {isHovered && 
+              <div 
+                onMouseDown={(e) => {
+                  e.stopPropagation();
+                  handleMouseDown(e);
+                }}
+                style={{ 
+                  position: 'absolute', 
+                  left: `${progressPercentage}%`,
+                  transform: 'translateX(-50%)',
+                  top: '50%',
+                  marginTop: '-10px',
+                  cursor: isDragging ? 'grabbing' : 'grab',
+                  userSelect: 'none',
+                }}>
+                <ScubberIcon style={{ 
+                  width: '15px', 
+                  height: '15px', 
+                  pointerEvents: 'none',
+                }} />
+              </div>
+            }
+            </>
           )}
         </div>
         <p style={{ fontFamily: 'var(--primary-font-family)', fontSize: '9px', fontWeight: '500', color: 'var(--font-color-primary)', width: '30px' }}>
@@ -96,7 +178,6 @@ function EpisodeScreen({ selectedPodcast, selectedEpisode, playbackControls }) {
       // Cleanup function runs ONLY when component unmounts
       if (selectedEpisode?.id && currentTimeRef.current !== undefined && window.podcasts?.updateEpisodeProgress) {
         const progress = Math.floor(currentTimeRef.current);
-        console.log('saving progress', progress);
         window.podcasts.updateEpisodeProgress(selectedEpisode.id, progress).catch((error) => {
           console.error('Failed to save episode progress:', error);
         });
