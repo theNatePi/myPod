@@ -1,3 +1,6 @@
+import BlueAlertIcon from './../../assets/blue-alert.svg?react';
+import GreenAlertIcon from './../../assets/green-alert.svg?react';
+
 function ListItem({text, onClick, isSelected}) {
   return (
     <div    
@@ -9,7 +12,7 @@ function ListItem({text, onClick, isSelected}) {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'start',
-        justifyContent: 'start',
+        justifyContent: 'space-between',
         overflow: isSelected ? 'visible' : 'hidden',
         cursor: 'pointer',
       }}
@@ -17,14 +20,28 @@ function ListItem({text, onClick, isSelected}) {
     >
       <p 
         style={{ 
+          maxWidth: '80%',
           fontFamily: 'var(--primary-font-family)', 
           fontSize: '12px', 
           fontWeight: '600', 
           color: isSelected ? 'var(--font-color-secondary)' : 'var(--font-color-primary)',
           marginLeft: '10px',
-        }}>
-          {text}
-        </p>
+        }}
+      >
+        {text}
+      </p>
+      <div
+        style={{
+          width: '15px',
+          alignSelf: 'stretch',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {/* <BlueAlertIcon style={{ width: '10px', height: '10px' }} /> */}
+        <GreenAlertIcon style={{ width: '10px', height: '10px' }} />
+      </div>
     </div>
   )
 }
