@@ -30,6 +30,12 @@ function setupKeybinds() {
       label: 'Close myPod',
       role: 'quit',
       accelerator: process.platform === 'darwin' ? 'Command+Q' : 'Alt+F4'
+    },
+    // open dev tools
+    {
+      label: 'Open Dev Tools',
+      role: 'toggleDevTools',
+      accelerator: 'CommandOrControl+Shift+I'
     }
   ]);
   

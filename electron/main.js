@@ -1,5 +1,9 @@
 const { app, BrowserWindow } = require("electron");
+const { setupKeybinds } = require('./keybinds');
+const { getOrInitDB } = require("./db");
+const { addFeed } = require("./db/feeds");
 const path = require("path");
+const { getFeedByUrl } = require("./rss");
 require("./ipc");
 require("./keybinds");
 
@@ -55,15 +59,18 @@ function createWindow() {
   });
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  getOrInitDB();
+  const feed = await getFeedByUrl('https://anchor.fm/s/ee8fff40/podcast/rss');
+  await addFeed(feed);
   createWindow();
-  const { setupKeybinds } = require('./keybinds');
   setupKeybinds();
 });
 
 // Reopen window when dock icon is clicked on macOS
 app.on('activate', () => {
   if (mainWindow === null) {
+    getOrInitDB();
     createWindow();
   } else if (mainWindow.isVisible() === false) {
     mainWindow.show();

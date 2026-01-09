@@ -1,16 +1,25 @@
 const { ipcMain, BrowserWindow } = require("electron");
-const { addFeed, getAllFeeds, getEpisodes } = require("./rss");
+const { getFeedByUrl } = require("./rss");
+const { addFeed, listFeeds } = require("./db/feeds");
+const { listEpisodes, updateEpisodeProgress } = require("./db/episodes");
 
 ipcMain.handle("feed:add", async (_, feedUrl) => {
-  return addFeed(feedUrl);
+  const feed = await getFeedByUrl(feedUrl);
+  return addFeed(feed);
 });
 
 ipcMain.handle("feed:list", async () => {
-  return getAllFeeds();
+  const feeds = await listFeeds();
+  return feeds;
 });
 
-ipcMain.handle("episode:list", async (_, feedId) => {
-  return getEpisodes(feedId);
+ipcMain.handle("episode:list", async (_, feedUrl) => {
+  const episodes = await listEpisodes(feedUrl);
+  return episodes;
+});
+
+ipcMain.handle("episode:updateProgress", async (_, episodeId, progress) => {
+  return updateEpisodeProgress(episodeId, progress);
 });
 
 ipcMain.handle("windowData:isAlwaysOnTop", async () => {

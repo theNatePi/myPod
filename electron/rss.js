@@ -1,4 +1,5 @@
 const Parser = require("rss-parser");
+const he = require("he");
 
 const parser = new Parser({
   timeout: 10000,
@@ -7,29 +8,30 @@ const parser = new Parser({
 // In-memory storage for feeds
 const feeds = new Map();
 
-function normalizeFeed(feed, feedUrl) {
+// Helper function to decode HTML entities in strings
+function decodeHtmlEntities(text) {
+  if (!text || typeof text !== 'string') return text;
+  return he.decode(text);
+}
+
+function normalizeFeed(feed) {
   return {
-    id: feed.link || feedUrl,
-    feedUrl: feedUrl, // Store the original URL for lookup
-    title: feed.title,
-    description: feed.description,
-    image: feed.itunes?.image || feed.image?.url,
-    author: feed.itunes?.author,
     link: feed.link,
+    title: decodeHtmlEntities(feed.title),
+    description: decodeHtmlEntities(feed.description),
+    image: feed.itunes?.image || feed.image?.url,
+    author: decodeHtmlEntities(feed.itunes?.author),
     episodes: feed.items.map(item => normalizeEpisode(item, feed)),
   };
 }
 
 function normalizeEpisode(item, feed) {
-  // Helper to get first non-undefined value
-  const firstDefined = (...values) => values.find(v => v !== undefined);
-  
   return {
-    id: item.guid || item.id,
-    title: item.title,
-    description: item.contentSnippet || item.content,
+    episodeId: item.guid || item.id,
+    feedUrl: feed.link,
+    title: decodeHtmlEntities(item.title),
+    description: decodeHtmlEntities(item.contentSnippet || item.content),
     audioUrl: item.enclosure?.url,
-    image: firstDefined(item.itunes?.image, item.image?.url, feed.itunes?.image, feed.image?.url),
     duration: item.itunes?.duration,
     pubDate: new Date(item.pubDate),
   };
@@ -41,7 +43,7 @@ async function fetchFeed(url) {
   return normalizeFeed(feed, url);
 }
 
-async function addFeed(url) {
+async function getFeedByUrl(url) {
   try {
     // Check if feed already exists by URL
     const existingFeeds = Array.from(feeds.values());
@@ -72,7 +74,7 @@ function getEpisodes(feedId) {
 
 module.exports = {
   fetchFeed,
-  addFeed,
+  getFeedByUrl,
   getAllFeeds,
   getEpisodes,
 };

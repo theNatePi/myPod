@@ -19,12 +19,6 @@ function App() {
     }
   }, [selectedEpisode]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const rssUrls = {
-    'The Yard': 'https://feeds.megaphone.fm/theyard',
-    'Waveform': 'https://feeds.megaphone.fm/STU4418364045',
-    'WAN Show': 'https://feeds.megaphone.fm/LMG3928170156'
-  }
-
   return (
     <>
       <div>
@@ -34,7 +28,6 @@ function App() {
             setCurrentScreen={setCurrentScreen} 
             selectedPodcast={selectedPodcast} 
             setSelectedPodcast={setSelectedPodcast} 
-            rssUrls={rssUrls} 
             selectedEpisode={selectedEpisode} 
             setSelectedEpisode={setSelectedEpisode}
             playbackControls={playbackControls}

@@ -1,7 +1,7 @@
 import BlueAlertIcon from './../../assets/blue-alert.svg?react';
 import GreenAlertIcon from './../../assets/green-alert.svg?react';
 
-function ListItem({text, onClick, isSelected}) {
+function ListItem({text, onClick, isSelected, showBlueAlert = false}) {
   return (
     <div    
       style={{
@@ -40,7 +40,7 @@ function ListItem({text, onClick, isSelected}) {
         }}
       >
         {/* <BlueAlertIcon style={{ width: '10px', height: '10px' }} /> */}
-        <GreenAlertIcon style={{ width: '10px', height: '10px' }} />
+        {showBlueAlert && <BlueAlertIcon style={{ width: '10px', height: '10px' }} />}
       </div>
     </div>
   )

@@ -111,11 +111,11 @@ export function usePlaybackControls() {
   };
 
   const loadEpisode = (episode) => {
-    if (audioRef.current && episode?.audioUrl) {
+    if (audioRef.current && episode?.audio_url) {
       setCurrentEpisode(episode);
-      setCurrentTime(0);
+      setCurrentTime(episode?.progress || 0);
       setDuration(0);
-      audioRef.current.src = episode.audioUrl;
+      audioRef.current.src = episode.audio_url;
       audioRef.current.load();
       
       // Start playing once the audio is ready

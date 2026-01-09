@@ -2,12 +2,10 @@ import { useState, useEffect } from 'react';
 import { ListItem } from './screenComponents';
 import LoadingScreen from './loadingScreen';
 
-function PodcastScreen({ setCurrentScreen, selectedPodcast, rssUrls, setSelectedEpisode }) {
+function PodcastScreen({ setCurrentScreen, selectedPodcast, setSelectedEpisode }) {
   const [isLoading, setIsLoading] = useState(true);
 
-  const feedUrl = rssUrls[selectedPodcast];
   const [episodes, setEpisodes] = useState([]);
-  const [feedInfo, setFeedInfo] = useState(null);
   const [selectedEpisodeIndex, setSelectedEpisodeIndex] = useState(0);
 
   useEffect(() => {
@@ -44,23 +42,8 @@ function PodcastScreen({ setCurrentScreen, selectedPodcast, rssUrls, setSelected
       
       try {
         // First, get all feeds to find the one matching the URL
-        let feeds = await window.podcasts.listFeeds();
-        let feed = feeds.find(f => f.feedUrl === feedUrl || f.link === feedUrl || f.id === feedUrl);
-        
-        // If feed not found, try to add it
-        if (!feed) {
-          console.log(`Feed not found, adding: ${feedUrl}`);
-          feed = await window.podcasts.addFeed(feedUrl);
-        }
-        
-        if (feed) {
-          setFeedInfo(feed);
-          // Get episodes using the feed ID
-          const episodesList = await window.podcasts.listEpisodes(feed.id);
-          setEpisodes(episodesList);
-        } else {
-          console.error(`Failed to load feed for URL: ${feedUrl}`);
-        }
+        const episodesList = await window.podcasts.listEpisodes(selectedPodcast.feed_url);
+        setEpisodes(episodesList);
       } catch (error) {
         console.error('Error fetching episodes:', error);
       } finally {
@@ -68,10 +51,10 @@ function PodcastScreen({ setCurrentScreen, selectedPodcast, rssUrls, setSelected
       }
     };
     
-    if (feedUrl) {
+    if (selectedPodcast?.feed_url) {
       fetchEpisodes();
     }
-  }, [feedUrl]);
+  }, [selectedPodcast]);
 
   return (
     <>
@@ -99,7 +82,7 @@ function PodcastScreen({ setCurrentScreen, selectedPodcast, rssUrls, setSelected
                 marginLeft: '10px' 
               }}
             >
-              {feedInfo?.title || selectedPodcast}
+              {selectedPodcast.title}
             </p>
             <div 
               style={{ 
@@ -114,7 +97,7 @@ function PodcastScreen({ setCurrentScreen, selectedPodcast, rssUrls, setSelected
           {episodes.length > 0 && (
             <div style={{ width: '100%' }}>
               {episodes.map((episode, index) => (
-                <ListItem key={episode.id} text={episode.title} onClick={() => { setSelectedEpisode(episode); setCurrentScreen('episode'); }} isSelected={index === selectedEpisodeIndex} />
+                <ListItem key={episode.id} text={episode.title} onClick={() => { setSelectedEpisode(episode); setCurrentScreen('episode'); }} isSelected={index === selectedEpisodeIndex} showBlueAlert={episode.progress === 0} />
               ))}
             </div>
         )}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import LoadingScreen from './loadingScreen';
 
 function PlayerBar({ playbackControls }) {
@@ -73,7 +73,62 @@ function PlayerBar({ playbackControls }) {
   )
 }
 
-function EpisodeScreen({ selectedEpisode, playbackControls }) {
+function EpisodeScreen({ selectedPodcast, selectedEpisode, playbackControls }) {
+  // Use a ref to always capture the latest currentTime without causing re-renders
+  const currentTimeRef = useRef(0);
+  const hasSetInitialTimeRef = useRef(false);
+  
+  // Update the ref whenever currentTime changes (doesn't trigger effect re-run)
+  useEffect(() => {
+    if (playbackControls?.currentTime !== undefined) {
+      currentTimeRef.current = playbackControls.currentTime;
+    }
+  }, [playbackControls?.currentTime]);
+
+  // Reset the flag when episode changes
+  useEffect(() => {
+    hasSetInitialTimeRef.current = false;
+  }, [selectedEpisode?.id]);
+
+  // Save progress when component unmounts (user leaves the screen)
+  useEffect(() => {
+    return () => {
+      // Cleanup function runs ONLY when component unmounts
+      if (selectedEpisode?.id && currentTimeRef.current !== undefined && window.podcasts?.updateEpisodeProgress) {
+        const progress = Math.floor(currentTimeRef.current);
+        console.log('saving progress', progress);
+        window.podcasts.updateEpisodeProgress(selectedEpisode.id, progress).catch((error) => {
+          console.error('Failed to save episode progress:', error);
+        });
+      }
+    };
+  }, [selectedEpisode?.id]); // Only re-run if episode changes, cleanup runs on unmount
+
+  // Set audio currentTime when audio is ready and playbackControls.currentTime is available
+  useEffect(() => {
+    const audioRef = playbackControls?.audioRef;
+    const startTime = playbackControls?.currentTime;
+    if (!audioRef?.current || startTime === undefined || hasSetInitialTimeRef.current) return;
+
+    const audioElement = audioRef.current;
+    const handleCanPlay = () => {
+      if (startTime > 0 && !hasSetInitialTimeRef.current) {
+        audioElement.currentTime = startTime;
+        hasSetInitialTimeRef.current = true;
+      }
+    };
+
+    // If audio is already ready, set it immediately
+    if (audioElement.readyState >= 2) { // HAVE_CURRENT_DATA or higher
+      handleCanPlay();
+    } else {
+      audioElement.addEventListener('canplay', handleCanPlay, { once: true });
+    }
+
+    return () => {
+      audioElement.removeEventListener('canplay', handleCanPlay);
+    };
+  }, [playbackControls?.audioRef, playbackControls?.currentTime, selectedEpisode?.id]);
 
   return (
     <div
@@ -96,7 +151,7 @@ function EpisodeScreen({ selectedEpisode, playbackControls }) {
           borderRadius: '4px',
           marginTop: '8px',
         }}
-        src={selectedEpisode?.image} 
+        src={selectedPodcast?.image} 
       />
 
       <audio 
@@ -147,7 +202,7 @@ function EpisodeScreen({ selectedEpisode, playbackControls }) {
               width: '80%',
             }}
           >
-            {selectedEpisode?.pubDate?.toLocaleDateString()}
+            {new Date(selectedEpisode?.pub_date).toLocaleDateString()}
           </p>
         </div>
         <PlayerBar playbackControls={playbackControls} />
