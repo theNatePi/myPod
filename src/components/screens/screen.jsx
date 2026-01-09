@@ -2,7 +2,7 @@ import TimeBar from './timeBar';
 import HomeScreen from './homeScreen';
 import PodcastScreen from './podcastScreen';
 import EpisodeScreen from './episodeScreen';
-import { useEffect, useState } from 'react';
+import AddPodcastScreen from './addPodcastScreen';
 
 function Screen({ currentScreen, setCurrentScreen, selectedPodcast, setSelectedPodcast, selectedEpisode, setSelectedEpisode, playbackControls }) {
   // const listItems = useMemo(() => [
@@ -11,23 +11,6 @@ function Screen({ currentScreen, setCurrentScreen, selectedPodcast, setSelectedP
   //   { text: 'WAN Show', onClick: () => { setCurrentScreen('podcast'); setSelectedPodcast('WAN Show'); } },
   //   { text: 'Waveform', onClick: () => { setCurrentScreen('podcast'); setSelectedPodcast('Waveform'); } }
   // ], [setCurrentScreen, setSelectedPodcast]);
-
-  const [podcasts, setPodcasts] = useState([]);
-
-  useEffect(() => {
-    const fetchFeeds = async () => {
-      const feeds = await window.podcasts.listFeeds();
-      const enrichedFeeds = feeds.map(feed => ({
-        text: feed.title,
-        onClick: () => {
-          setSelectedPodcast(feed);
-          setCurrentScreen('podcast');
-        }
-      }));
-      setPodcasts(enrichedFeeds);
-    }
-    fetchFeeds();
-  }, [setCurrentScreen, setSelectedPodcast]);
 
   return (
     <div
@@ -57,9 +40,10 @@ function Screen({ currentScreen, setCurrentScreen, selectedPodcast, setSelectedP
       >
         <TimeBar />
         <div style={{ overflowY: currentScreen === 'episode' ? 'hidden' : 'auto', scrollbarWidth: 'none', width: '100%', height: '100%' }}>
-          {currentScreen === 'home' && <HomeScreen podcasts={podcasts} />}
+          {currentScreen === 'home' && <HomeScreen setCurrentScreen={setCurrentScreen} setSelectedPodcast={setSelectedPodcast} />}
           {currentScreen === 'podcast' && <PodcastScreen setCurrentScreen={setCurrentScreen} selectedPodcast={selectedPodcast} setSelectedEpisode={setSelectedEpisode} />}
           {currentScreen === 'episode' && <EpisodeScreen selectedPodcast={selectedPodcast} selectedEpisode={selectedEpisode} playbackControls={playbackControls} />}
+          {currentScreen === 'addPodcast' && <AddPodcastScreen setCurrentScreen={setCurrentScreen} />}
         </div>
       </div>
     </div>

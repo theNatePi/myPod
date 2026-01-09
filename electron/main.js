@@ -61,8 +61,6 @@ function createWindow() {
 
 app.whenReady().then(async () => {
   getOrInitDB();
-  const feed = await getFeedByUrl('https://anchor.fm/s/ee8fff40/podcast/rss');
-  await addFeed(feed);
   createWindow();
   setupKeybinds();
 });
