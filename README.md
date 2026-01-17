@@ -30,7 +30,8 @@
 - [Build From Source](#build-from-source)
 
 ## Installation
-WIP
+If you are using `macOS` on an `M-Series` device, you can download the demo from the GitHub "Releases"
+Otherwise, see the [Build From Source](#build-from-source) section.
 
 ## Podcasts and RSS
 Most podcasts are published through RSS feeds using an open standard to share their content. </br>
