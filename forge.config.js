@@ -1,5 +1,6 @@
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
+const path = require('path');
 
 module.exports = {
   packagerConfig: {
@@ -19,7 +20,29 @@ module.exports = {
     {
       name: '@electron-forge/maker-dmg',
       config: {
-        overwrite: true
+        background: path.resolve(__dirname, 'public/dmg-background-flat.png'),
+        format: 'UDZO',
+        overwrite: true,
+    
+        window: {
+          width: 600,
+          height: 400,
+        },
+    
+        contents: [
+          {
+            x: 140,
+            y: 220,
+            type: 'file',
+            path: './out/mypod-darwin-arm64/mypod.app',
+          },
+          {
+            x: 460,
+            y: 220,
+            type: 'link',
+            path: '/Applications',
+          },
+        ],
       }
     },
     {
