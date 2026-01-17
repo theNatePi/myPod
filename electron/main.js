@@ -44,7 +44,15 @@ function createWindow() {
     resizable: false
   });
 
-  mainWindow.loadURL("http://localhost:5173");
+  // Load the app - use dev server in development, built files in production
+  if (!app.isPackaged) {
+    mainWindow.loadURL("http://localhost:5173");
+  } else {
+    // In production, load from the built files
+    // When packaged, dist folder is at the root of the app
+    const distPath = path.join(app.getAppPath(), "dist", "index.html");
+    mainWindow.loadFile(distPath);
+  }
 
   // Handle window close - allow it to close normally
   // We'll quit the app in window-all-closed handler
