@@ -1,9 +1,7 @@
 const { app, BrowserWindow } = require("electron");
 const { setupKeybinds } = require('./keybinds');
 const { getOrInitDB } = require("./db");
-const { addFeed } = require("./db/feeds");
 const path = require("path");
-const { getFeedByUrl } = require("./rss");
 require("./ipc");
 require("./keybinds");
 
