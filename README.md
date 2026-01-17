@@ -30,7 +30,7 @@
 - [Build From Source](#build-from-source)
 
 ## Installation
-If you are using `macOS` on an `M-Series` device, you can download the demo from the GitHub "Releases"
+If you are using `macOS` on an `M-Series` device, you can download the demo from the GitHub "Releases" </br>
 Otherwise, see the [Build From Source](#build-from-source) section.
 
 ## Podcasts and RSS
