@@ -27,6 +27,10 @@
 - [How To Use](#how-to-use)
   - [Moving the window](#moving-the-window)
   - [Closing the window](#closing-the-window)
+  - [Navigating the player](#navigating-the-player)
+  - [Adding a podcast](#adding-a-podcast)
+  - [Playing episodes](#playing-episodes)
+  - [Removing podcasts](#removing-podcasts)
 - [Build From Source](#build-from-source)
 
 ## Installation
@@ -64,7 +68,7 @@ Not yet implemented
 
 ### Prerequisites
 
-Before building myPod from source, ensure you have the following installed:
+Before building myPod from source, ensure you have the following installed (only for building the full app, not required for testing):
 
 - **Node.js** (v18 or higher recommended)
 - **npm** (comes with Node.js)
@@ -87,7 +91,7 @@ Before building myPod from source, ensure you have the following installed:
    ```
 
 3. **Development mode**
-   To run the app in development mode with hot reload:
+   To run the app in development mode with hot reload. If you just want to test the app, you can stop here:
    ```bash
    npm run dev
    ```
