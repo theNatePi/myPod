@@ -16,30 +16,48 @@
         <li>Caching and interval updates of all content</li>
       </ul>
       <p>.</p>
-      <p>.</p>
+      <p>This app was build for, and tested on, macOS</p>
     </td>
   </tr>
 </table>
 
 ## Table of Contents
-WIP
+- [Installation](#installation)
+- [Podcasts and RSS](#podcasts-and-rss)
+- [How To Use](#how-to-use)
+  - [Moving the window](#moving-the-window)
+  - [Closing the window](#closing-the-window)
+- [Build From Source](#build-from-source)
 
 ## Installation
 WIP
 
+## Podcasts and RSS
+Most podcasts are published through RSS feeds using an open standard to share their content. </br>
+You can find more information about podcasts and RSS in [this article](https://podcast.adobe.com/en/guides/podcast-rss-feeds) from Adobe. </br>
+To use myPod, you will first need to find the RSS feed of the podcast you want to listen to. [Podcastindex.org](https://podcastindex.org/stats) should have RSS links to most publicly available podcasts, but any source will do.
 
 ## How To Use
-WIP
-
 ### Moving the window
 To move the player window, click at the top of the frame (where a window frame would normally appear) and drag the window
 
 ### Closing the window
-Simply press `CMD + Q` on macOS or `ALT + F4` on Windows to quit
+Simply press `CMD + Q` on macOS or `ALT + F4` on Windows to quit. The standard window frame and window controls are hidden for a cleaner look.
 
-#### Why?
-The normal frame and window controls are hidden for a cleaner look
+### Navigating the player
+You can use arrow keys and `Enter` to navigate through menu items. To return to the previous screen, press the `Menu` button on the navigation circle, or press `Escape`. </br>
+You can also click on any of the buttons or items to select them.
 
+### Adding a podcast
+To add a podcast, navigate to "+ Add Podcast" on the home screen. Paste in an RSS link (see [Podcasts and RSS](#podcasts-and-rss) to get one), then press "Add Podcast".
+
+### Playing episodes
+Once you have added a podcast, select it and choose and episode. To skip around, use the "forward" and "backwards" buttons on the navcircle. The play/pause button is also located in the navcircle. You can also "scrub" to a selected point in the podcast using by hovering over the player bar and clicking/dragging. If you leave an episode and return, the player will resume where you left off. </br>
+A blue circle will appear next to any episodes in a podcast which have not been started. </br>
+Podcasts will be refreshed once every 24hrs.
+
+### Removing podcasts
+Not yet implemented
 
 ## Build From Source
-WIP
+
