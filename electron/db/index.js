@@ -6,17 +6,22 @@ const { app } = require("electron");
 let db;
 
 function initDB() {
-  const dbPath = path.join(app.getPath("userData"), "podcasts.db");
+  try {
+    const dbPath = path.join(app.getPath("userData"), "podcasts.db");
 
-  db = new Database(dbPath);
+    db = new Database(dbPath);
 
-  // Safety & performance defaults
-  db.pragma("journal_mode = WAL");
-  db.pragma("foreign_keys = ON");
+    // Safety & performance defaults
+    db.pragma("journal_mode = WAL");
+    db.pragma("foreign_keys = ON");
 
-  migrate(db);
+    migrate(db);
 
-  return db;
+    return db;
+  } catch (error) {
+    console.error('Error initializing database:', error);
+    throw error;
+  }
 }
 
 function getDB() {

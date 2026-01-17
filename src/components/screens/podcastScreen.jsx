@@ -43,6 +43,10 @@ function PodcastScreen({ selectedPodcast, setSelectedEpisode, dispatch }) {
       
       try {
         // First, get all feeds to find the one matching the URL
+        if (new Date(selectedPodcast.last_fetched) < new Date(Date.now() - 1000 * 60 * 60 * 24)) {
+          await window.podcasts.refreshFeed(selectedPodcast.feed_url);
+        }
+
         const episodesList = await window.podcasts.listEpisodes(selectedPodcast.feed_url);
         setEpisodes(episodesList);
       } catch (error) {

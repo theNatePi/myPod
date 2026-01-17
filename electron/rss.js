@@ -14,9 +14,9 @@ function decodeHtmlEntities(text) {
   return he.decode(text);
 }
 
-function normalizeFeed(feed) {
+function normalizeFeed(feed, url) {
   return {
-    link: feed.link,
+    link: url,
     title: decodeHtmlEntities(feed.title),
     description: decodeHtmlEntities(feed.description),
     image: feed.itunes?.image || feed.image?.url,

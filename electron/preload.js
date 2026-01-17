@@ -3,6 +3,8 @@ const { contextBridge, ipcRenderer } = require("electron");
 contextBridge.exposeInMainWorld("podcasts", {
   addFeed: (url) => ipcRenderer.invoke("feed:add", url),
   listFeeds: () => ipcRenderer.invoke("feed:list"),
+  getFeedByUrl: (feedUrl) => ipcRenderer.invoke("feed:getByUrl", feedUrl),
+  refreshFeed: (feedUrl) => ipcRenderer.invoke("feed:refresh", feedUrl),
   listEpisodes: (feedUrl) => ipcRenderer.invoke("episode:list", feedUrl),
   updateEpisodeProgress: (episodeId, progress) => ipcRenderer.invoke("episode:updateProgress", episodeId, progress),
 });
