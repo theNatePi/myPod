@@ -23,7 +23,7 @@ function NavButton({ children, margin, onClick }) {
   )
 }
 
-function NavCircle({ currentScreen, setCurrentScreen, playbackControls }) {
+function NavCircle({ dispatch, playbackControls }) {
   const handlePlayPause = () => {
     if (playbackControls) {
       playbackControls.togglePlayPause();
@@ -65,7 +65,7 @@ function NavCircle({ currentScreen, setCurrentScreen, playbackControls }) {
         }}
       >
         <NavButton margin="0 0 115px 0">
-          <p style={{ fontSize: '15px', fontWeight: '700', color: 'var(--font-color-primary)' }} onClick={() => currentScreen === 'episode' ? setCurrentScreen('podcast') : setCurrentScreen('home')}>
+          <p style={{ fontSize: '15px', fontWeight: '700', color: 'var(--font-color-primary)' }} onClick={() => dispatch({ type: 'POP' })}>
             MENU
           </p>
         </NavButton>

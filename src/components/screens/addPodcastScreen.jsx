@@ -1,13 +1,13 @@
 import { useState } from 'react';
 
-function AddPodcastScreen({ setCurrentScreen }) {
+function AddPodcastScreen({ dispatch }) {
   const [feedUrl, setFeedUrl] = useState('');
 
   const handleAddPodcast = async () => {
     if (!feedUrl.trim()) return;
     try {
       await window.podcasts?.addFeed(feedUrl.trim());
-      setCurrentScreen('home');
+      dispatch({ type: 'POP' });
       setFeedUrl('');
     } catch (error) {
       console.error('Failed to add podcast:', error);

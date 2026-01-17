@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ListItem } from './screenComponents';
 import LoadingScreen from './loadingScreen';
+import { SCREENS } from '../../utils/navReducer';
 
-function HomeScreen({ setCurrentScreen, setSelectedPodcast }) {
+function HomeScreen({ setSelectedPodcast, dispatch }) {
   const [isLoading, setIsLoading] = useState(true);
   const [podcasts, setPodcasts] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -14,14 +15,14 @@ function HomeScreen({ setCurrentScreen, setSelectedPodcast }) {
         text: feed.title,
         onClick: () => {
           setSelectedPodcast(feed);
-          setCurrentScreen('podcast');
+          dispatch({ type: 'PUSH', screen: SCREENS.PODCASTS });
         }
       }));
       setPodcasts(enrichedFeeds);
       setIsLoading(false);
     }
     fetchFeeds();
-  }, []);
+  }, [dispatch, setSelectedPodcast]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -37,7 +38,7 @@ function HomeScreen({ setCurrentScreen, setSelectedPodcast }) {
         );
       } else if (event.key === 'Enter') {
         if (selectedIndex === -1) {
-          setCurrentScreen('addPodcast');
+          dispatch({ type: 'PUSH', screen: SCREENS.ADD_PODCAST });
           return;
         }
         podcasts[selectedIndex].onClick();
@@ -49,7 +50,7 @@ function HomeScreen({ setCurrentScreen, setSelectedPodcast }) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [podcasts, selectedIndex]);
+  }, [podcasts, selectedIndex, dispatch]);
 
   return (
     <>
@@ -89,7 +90,7 @@ function HomeScreen({ setCurrentScreen, setSelectedPodcast }) {
             }} 
           />
         </div>
-        <ListItem text={"+ Add Podcast"} onClick={() => {setCurrentScreen('addPodcast')}} isSelected={selectedIndex === -1} />
+        <ListItem text={"+ Add Podcast"} onClick={() => {dispatch({ type: 'PUSH', screen: SCREENS.ADD_PODCAST })}} isSelected={selectedIndex === -1} />
         {podcasts.map((item, index) => (
           <ListItem key={item.text} text={item.text} onClick={item.onClick} isSelected={selectedIndex === index} />
           ))}

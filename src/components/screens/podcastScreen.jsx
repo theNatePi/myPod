@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ListItem } from './screenComponents';
 import LoadingScreen from './loadingScreen';
+import { SCREENS } from '../../utils/navReducer';
 
-function PodcastScreen({ setCurrentScreen, selectedPodcast, setSelectedEpisode }) {
+function PodcastScreen({ selectedPodcast, setSelectedEpisode, dispatch }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const [episodes, setEpisodes] = useState([]);
@@ -22,7 +23,7 @@ function PodcastScreen({ setCurrentScreen, selectedPodcast, setSelectedEpisode }
         );
       } else if (event.key === 'Enter') {
         setSelectedEpisode(episodes[selectedEpisodeIndex]);
-        setCurrentScreen('episode');
+        dispatch({ type: 'PUSH', screen: SCREENS.EPISODE });
       }
     };
 
@@ -31,7 +32,7 @@ function PodcastScreen({ setCurrentScreen, selectedPodcast, setSelectedEpisode }
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [episodes, selectedEpisodeIndex]);
+  }, [episodes, selectedEpisodeIndex, dispatch, setSelectedEpisode]);
 
   useEffect(() => {
     const fetchEpisodes = async () => {
@@ -97,7 +98,7 @@ function PodcastScreen({ setCurrentScreen, selectedPodcast, setSelectedEpisode }
           {episodes.length > 0 && (
             <div style={{ width: '100%' }}>
               {episodes.map((episode, index) => (
-                <ListItem key={episode.id} text={episode.title} onClick={() => { setSelectedEpisode(episode); setCurrentScreen('episode'); }} isSelected={index === selectedEpisodeIndex} showBlueAlert={episode.progress === 0} />
+                <ListItem key={episode.id} text={episode.title} onClick={() => { setSelectedEpisode(episode); dispatch({ type: 'PUSH', screen: SCREENS.EPISODE }); }} isSelected={index === selectedEpisodeIndex} showBlueAlert={episode.progress === 0} />
               ))}
             </div>
         )}

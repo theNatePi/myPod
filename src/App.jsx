@@ -4,10 +4,12 @@ import './App.css'
 import Body from './components/body'
 import NavCircle from './components/navcircle/navCircle'
 import Screen from './components/screens/screen'
-import { usePlaybackControls } from './hooks/usePlaybackControls'
+import { usePlaybackControls } from './utils/usePlaybackControls'
+import { navReducer, SCREENS } from './utils/navReducer';
+import { useReducer } from 'react';
 
 function App() {
-  const [currentScreen, setCurrentScreen] = useState('home');
+  const [screenStack, dispatch] = useReducer(navReducer, [SCREENS.HOME]);
   const [selectedPodcast, setSelectedPodcast] = useState(null);
   const [selectedEpisode, setSelectedEpisode] = useState(null);
   const playbackControls = usePlaybackControls();
@@ -23,18 +25,17 @@ function App() {
     <>
       <div>
         <Body>
-          <Screen 
-            currentScreen={currentScreen} 
-            setCurrentScreen={setCurrentScreen} 
+          <Screen
+            screenStack={screenStack}
+            dispatch={dispatch}
             selectedPodcast={selectedPodcast} 
             setSelectedPodcast={setSelectedPodcast} 
             selectedEpisode={selectedEpisode} 
             setSelectedEpisode={setSelectedEpisode}
             playbackControls={playbackControls}
           />
-          <NavCircle 
-            currentScreen={currentScreen} 
-            setCurrentScreen={setCurrentScreen}
+          <NavCircle
+            dispatch={dispatch}
             playbackControls={playbackControls}
           />
         </Body>

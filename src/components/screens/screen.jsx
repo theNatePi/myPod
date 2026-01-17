@@ -3,14 +3,26 @@ import HomeScreen from './homeScreen';
 import PodcastScreen from './podcastScreen';
 import EpisodeScreen from './episodeScreen';
 import AddPodcastScreen from './addPodcastScreen';
+import { SCREENS } from '../../utils/navReducer';
 
-function Screen({ currentScreen, setCurrentScreen, selectedPodcast, setSelectedPodcast, selectedEpisode, setSelectedEpisode, playbackControls }) {
-  // const listItems = useMemo(() => [
-  //   { text: '+ Add Podcast', onClick: () => {} },
-  //   { text: 'The Yard', onClick: () => { setCurrentScreen('podcast'); setSelectedPodcast('The Yard'); } },
-  //   { text: 'WAN Show', onClick: () => { setCurrentScreen('podcast'); setSelectedPodcast('WAN Show'); } },
-  //   { text: 'Waveform', onClick: () => { setCurrentScreen('podcast'); setSelectedPodcast('Waveform'); } }
-  // ], [setCurrentScreen, setSelectedPodcast]);
+function ScreenRenderer({ screen, dispatch, selectedPodcast, setSelectedPodcast, selectedEpisode, setSelectedEpisode, playbackControls }) {
+  switch (screen) {
+    case SCREENS.HOME:
+      return <HomeScreen setSelectedPodcast={setSelectedPodcast} dispatch={dispatch} />;
+    case SCREENS.PODCASTS:
+      return <PodcastScreen selectedPodcast={selectedPodcast} setSelectedEpisode={setSelectedEpisode} dispatch={dispatch} />;
+    case SCREENS.EPISODE:
+      return <EpisodeScreen selectedPodcast={selectedPodcast} selectedEpisode={selectedEpisode} playbackControls={playbackControls} dispatch={dispatch} />;
+    case SCREENS.ADD_PODCAST:
+      return <AddPodcastScreen dispatch={dispatch} />;
+    default:
+      return null;
+  }
+}
+
+
+function Screen({ screenStack, dispatch, selectedPodcast, setSelectedPodcast, selectedEpisode, setSelectedEpisode, playbackControls }) {
+  const currentScreen = screenStack[screenStack.length - 1];
 
   return (
     <div
@@ -40,10 +52,15 @@ function Screen({ currentScreen, setCurrentScreen, selectedPodcast, setSelectedP
       >
         <TimeBar />
         <div style={{ overflowY: currentScreen === 'episode' ? 'hidden' : 'auto', scrollbarWidth: 'none', width: '100%', height: '100%' }}>
-          {currentScreen === 'home' && <HomeScreen setCurrentScreen={setCurrentScreen} setSelectedPodcast={setSelectedPodcast} />}
-          {currentScreen === 'podcast' && <PodcastScreen setCurrentScreen={setCurrentScreen} selectedPodcast={selectedPodcast} setSelectedEpisode={setSelectedEpisode} />}
-          {currentScreen === 'episode' && <EpisodeScreen selectedPodcast={selectedPodcast} selectedEpisode={selectedEpisode} playbackControls={playbackControls} />}
-          {currentScreen === 'addPodcast' && <AddPodcastScreen setCurrentScreen={setCurrentScreen} />}
+          <ScreenRenderer 
+            screen={currentScreen}
+            dispatch={dispatch}
+            selectedPodcast={selectedPodcast}
+            setSelectedPodcast={setSelectedPodcast}
+            selectedEpisode={selectedEpisode}
+            setSelectedEpisode={setSelectedEpisode}
+            playbackControls={playbackControls}
+          />
         </div>
       </div>
     </div>
