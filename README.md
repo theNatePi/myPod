@@ -62,3 +62,50 @@ Not yet implemented
 
 ## Build From Source
 
+### Prerequisites
+
+Before building myPod from source, ensure you have the following installed:
+
+- **Node.js** (v18 or higher recommended)
+- **npm** (comes with Node.js)
+- **Build tools** for native dependencies:
+  - **macOS**: Xcode Command Line Tools (`xcode-select --install`)
+  - **Linux**: `build-essential` or equivalent
+  - **Windows**: Visual Studio Build Tools or Visual Studio with C++ workload
+
+### Installation Steps
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/myPod.git
+   cd myPod
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Development mode**
+   To run the app in development mode with hot reload:
+   ```bash
+   npm run dev
+   ```
+
+4. **Build for production**
+   To build the frontend assets:
+   ```bash
+   npm run build
+   ```
+
+5. **Package the application**
+   To create distributable packages for your platform:
+   ```bash
+   npm run make
+   ```
+
+   This will create platform-specific installers in the `out/` directory:
+   - **macOS**: `.dmg` and `.zip` files
+   - **Windows**: `.exe` installer (Squirrel)
+   - **Linux**: `.deb` and `.rpm` packages
+
