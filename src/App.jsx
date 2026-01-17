@@ -21,6 +21,16 @@ function App() {
     }
   }, [selectedEpisode]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        dispatch({ type: 'POP' });
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [dispatch]);
+
   return (
     <>
       <div>
