@@ -68,11 +68,11 @@ Not yet implemented
 
 ### Prerequisites
 
-Before building myPod from source, ensure you have the following installed (only for building the full app, not required for testing):
+Before building myPod from source, ensure you have the following installed:
 
 - **Node.js** (v18 or higher recommended)
 - **npm** (comes with Node.js)
-- **Build tools** for native dependencies:
+- **Build tools** for native dependencies (only for building the full app, not required for testing):
   - **macOS**: Xcode Command Line Tools (`xcode-select --install`)
   - **Linux**: `build-essential` or equivalent
   - **Windows**: Visual Studio Build Tools or Visual Studio with C++ workload
