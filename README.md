@@ -16,7 +16,7 @@
         <li>Caching and interval updates of all content</li>
       </ul>
       <p>.</p>
-      <p>This app was build for, and tested on, macOS</p>
+      <p>This app was build for, and only tested on, macOS</p>
     </td>
   </tr>
 </table>
