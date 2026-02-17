@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
-import { ListItem } from './screenComponents';
+import { ListContainer, ListItem } from './screenComponents';
 import LoadingScreen from './loadingScreen';
 import { SCREENS } from '../../utils/navReducer';
 
 function HomeScreen({ setSelectedPodcast, dispatch }) {
   const [isLoading, setIsLoading] = useState(true);
   const [podcasts, setPodcasts] = useState([]);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(0); // 0 is always "+ Add Podcast"
 
   useEffect(() => {
     const fetchFeeds = async () => {
       const feeds = await window.podcasts.listFeeds();
       const enrichedFeeds = feeds.map(feed => ({
+        id: feed.feed_url || feed.title,
         text: feed.title,
         onClick: () => {
           setSelectedPodcast(feed);
@@ -20,37 +21,15 @@ function HomeScreen({ setSelectedPodcast, dispatch }) {
       }));
       setPodcasts(enrichedFeeds);
       setIsLoading(false);
+      if (enrichedFeeds.length > 0) {
+        setSelectedIndex(1);
+      }
     }
     fetchFeeds();
   }, [dispatch, setSelectedPodcast]);
 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === 'ArrowUp') {
-        event.preventDefault();
-        setSelectedIndex((prevIndex) => 
-          prevIndex > -1 ? prevIndex - 1 : prevIndex
-        );
-      } else if (event.key === 'ArrowDown') {
-        event.preventDefault();
-        setSelectedIndex((prevIndex) => 
-          prevIndex < podcasts.length - 1 ? prevIndex + 1 : prevIndex
-        );
-      } else if (event.key === 'Enter') {
-        if (selectedIndex === -1) {
-          dispatch({ type: 'PUSH', screen: SCREENS.ADD_PODCAST });
-          return;
-        }
-        podcasts[selectedIndex].onClick();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [podcasts, selectedIndex, dispatch]);
+  const maxIndex = podcasts.length;
+  const activeSelectedIndex = Math.min(selectedIndex, maxIndex);
 
   return (
     <>
@@ -90,10 +69,28 @@ function HomeScreen({ setSelectedPodcast, dispatch }) {
             }} 
           />
         </div>
-        <ListItem text={"+ Add Podcast"} onClick={() => {dispatch({ type: 'PUSH', screen: SCREENS.ADD_PODCAST })}} isSelected={selectedIndex === -1} />
-        {podcasts.map((item, index) => (
-          <ListItem key={item.text} text={item.text} onClick={item.onClick} isSelected={selectedIndex === index} />
+        <ListContainer
+          selectedIndex={activeSelectedIndex}
+          onSelectionChange={(nextIndex) => {
+            setSelectedIndex(Math.max(0, Math.min(nextIndex, maxIndex)));
+          }}
+          onEnter={(index) => {
+            if (index === 0) {
+              dispatch({ type: 'PUSH', screen: SCREENS.ADD_PODCAST });
+              return;
+            }
+            podcasts[index - 1]?.onClick?.();
+          }}
+        >
+          <ListItem
+            text={"+ Add Podcast"}
+            onClick={() => { dispatch({ type: 'PUSH', screen: SCREENS.ADD_PODCAST }); }}
+            isSelected={activeSelectedIndex === 0}
+          />
+          {podcasts.map((item, index) => (
+            <ListItem key={item.id} text={item.text} onClick={item.onClick} isSelected={activeSelectedIndex === index + 1} />
           ))}
+        </ListContainer>
       </div>
     )}
     </>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ListItem } from './screenComponents';
+import { ListContainer, ListItem } from './screenComponents';
 import LoadingScreen from './loadingScreen';
 import { SCREENS } from '../../utils/navReducer';
 
@@ -9,30 +9,10 @@ function PodcastScreen({ selectedPodcast, setSelectedEpisode, dispatch }) {
   const [episodes, setEpisodes] = useState([]);
   const [selectedEpisodeIndex, setSelectedEpisodeIndex] = useState(0);
 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === 'ArrowUp') {
-        event.preventDefault();
-        setSelectedEpisodeIndex((prevIndex) => 
-          prevIndex > 0 ? prevIndex - 1 : prevIndex
-        );
-      } else if (event.key === 'ArrowDown') {
-        event.preventDefault();
-        setSelectedEpisodeIndex((prevIndex) => 
-          prevIndex < episodes.length - 1 ? prevIndex + 1 : prevIndex
-        );
-      } else if (event.key === 'Enter') {
-        setSelectedEpisode(episodes[selectedEpisodeIndex]);
-        dispatch({ type: 'PUSH', screen: SCREENS.EPISODE });
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [episodes, selectedEpisodeIndex, dispatch, setSelectedEpisode]);
+  const maxEpisodeIndex = Math.max(episodes.length - 1, 0);
+  const activeSelectedEpisodeIndex = episodes.length === 0
+    ? -1
+    : Math.min(selectedEpisodeIndex, maxEpisodeIndex);
 
   useEffect(() => {
     const fetchEpisodes = async () => {
@@ -99,13 +79,32 @@ function PodcastScreen({ selectedPodcast, setSelectedEpisode, dispatch }) {
               }}
             />
           </div>
-          {episodes.length > 0 && (
-            <div style={{ width: '100%' }}>
-              {episodes.map((episode, index) => (
-                <ListItem key={episode.id} text={episode.title} onClick={() => { setSelectedEpisode(episode); dispatch({ type: 'PUSH', screen: SCREENS.EPISODE }); }} isSelected={index === selectedEpisodeIndex} showBlueAlert={episode.progress === 0} />
-              ))}
-            </div>
-        )}
+          <ListContainer
+            selectedIndex={activeSelectedEpisodeIndex}
+            onSelectionChange={(nextIndex) => {
+              if (episodes.length === 0) return;
+              setSelectedEpisodeIndex(Math.max(0, Math.min(nextIndex, maxEpisodeIndex)));
+            }}
+            onEnter={(index) => {
+              const selectedEpisodeItem = episodes[index];
+              if (!selectedEpisodeItem) return;
+              setSelectedEpisode(selectedEpisodeItem);
+              dispatch({ type: 'PUSH', screen: SCREENS.EPISODE });
+            }}
+          >
+            {episodes.map((episode, index) => (
+              <ListItem
+                key={episode.id}
+                text={episode.title}
+                onClick={() => {
+                  setSelectedEpisode(episode);
+                  dispatch({ type: 'PUSH', screen: SCREENS.EPISODE });
+                }}
+                isSelected={index === activeSelectedEpisodeIndex}
+                showBlueAlert={episode.progress === 0}
+              />
+            ))}
+          </ListContainer>
       </div>
       )}
     </>

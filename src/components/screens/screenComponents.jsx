@@ -1,5 +1,74 @@
+import { Children, useEffect, useRef } from 'react';
 import BlueAlertIcon from './../../assets/blue-alert.svg?react';
-import GreenAlertIcon from './../../assets/green-alert.svg?react';
+
+function ListContainer({ children, selectedIndex, onSelectionChange, onEnter, style = {} }) {
+  const containerRef = useRef(null);
+  const items = Children.toArray(children);
+  const itemCount = items.length;
+
+  useEffect(() => {
+    if (!onSelectionChange || itemCount === 0) return;
+    if (selectedIndex < 0) {
+      onSelectionChange(0);
+      return;
+    }
+    if (selectedIndex > itemCount - 1) {
+      onSelectionChange(itemCount - 1);
+    }
+  }, [itemCount, onSelectionChange, selectedIndex]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (itemCount === 0 || !onSelectionChange) return;
+
+      if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        onSelectionChange(Math.max(0, selectedIndex - 1));
+      } else if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        onSelectionChange(Math.min(itemCount - 1, selectedIndex + 1));
+      } else if (event.key === 'Enter') {
+        event.preventDefault();
+        onEnter?.(selectedIndex);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [itemCount, onEnter, onSelectionChange, selectedIndex]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || selectedIndex < 0) return;
+
+    const selectedItem = container.querySelector(`[data-list-index="${selectedIndex}"]`);
+    if (selectedItem) {
+      selectedItem.scrollIntoView({ block: 'nearest' });
+    }
+  }, [selectedIndex, itemCount]);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        width: '100%',
+        flex: 1,
+        minHeight: 0,
+        overflowY: 'auto',
+        scrollbarWidth: 'none',
+        ...style,
+      }}
+    >
+      {items.map((child, index) => (
+        <div key={index} data-list-index={index}>
+          {child}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function ListItem({text, onClick, isSelected, showBlueAlert = false}) {
   return (
@@ -46,4 +115,4 @@ function ListItem({text, onClick, isSelected, showBlueAlert = false}) {
   )
 }
 
-export { ListItem };
+export { ListContainer, ListItem };
