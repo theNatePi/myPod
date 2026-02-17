@@ -1,12 +1,16 @@
 const { ipcMain, BrowserWindow } = require("electron");
 const { getFeedByUrl } = require("./rss");
-const { addFeed, listFeeds, getDBFeedByUrl, refreshFeed } = require("./db/feeds");
+const { addFeed, listFeeds, getDBFeedByUrl, refreshFeed, removeFeed } = require("./db/feeds");
 const { listEpisodes, updateEpisodeProgress } = require("./db/episodes");
 
 ipcMain.handle("feed:add", async (_, feedUrl) => {
   const feed = await getFeedByUrl(feedUrl);
   feed.link = feedUrl;
   return addFeed(feed);
+});
+
+ipcMain.handle("feed:remove", async (_, feedUrl) => {
+  return await removeFeed(feedUrl);
 });
 
 ipcMain.handle("feed:list", async () => {

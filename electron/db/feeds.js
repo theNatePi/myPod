@@ -48,10 +48,14 @@ async function refreshFeed(feed) {
   await db.prepare("UPDATE feeds SET last_fetched = ? WHERE feed_url = ?").run(new Date().toISOString(), feed.link);
 }
 
+async function removeFeed(feedUrl) {
+  const db = getDB();
+  await db.prepare("DELETE FROM feeds WHERE feed_url = ?").run(feedUrl);
+}
+
 function listFeeds() {
   const db = getDB();
   return db.prepare("SELECT * FROM feeds").all();
-  // TODO: check if the feed is outdated
 }
 
 function getDBFeedByUrl(feedUrl) {
@@ -63,5 +67,6 @@ module.exports = {
   addFeed,
   listFeeds,
   refreshFeed,
-  getDBFeedByUrl
+  getDBFeedByUrl,
+  removeFeed
 };

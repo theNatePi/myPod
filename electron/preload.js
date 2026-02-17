@@ -2,6 +2,7 @@ const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("podcasts", {
   addFeed: (url) => ipcRenderer.invoke("feed:add", url),
+  removeFeed: (url) => ipcRenderer.invoke("feed:remove", url),
   listFeeds: () => ipcRenderer.invoke("feed:list"),
   getFeedByUrl: (feedUrl) => ipcRenderer.invoke("feed:getByUrl", feedUrl),
   refreshFeed: (feedUrl) => ipcRenderer.invoke("feed:refresh", feedUrl),
