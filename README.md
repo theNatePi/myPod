@@ -16,7 +16,7 @@
         <li>Caching and interval updates of all content</li>
       </ul>
       <p>.</p>
-      <p>This app was build for, and tested on, macOS</p>
+      <p>This app was build for, and only tested on, macOS</p>
     </td>
   </tr>
 </table>
@@ -27,6 +27,10 @@
 - [How To Use](#how-to-use)
   - [Moving the window](#moving-the-window)
   - [Closing the window](#closing-the-window)
+  - [Navigating the player](#navigating-the-player)
+  - [Adding a podcast](#adding-a-podcast)
+  - [Playing episodes](#playing-episodes)
+  - [Removing podcasts](#removing-podcasts)
 - [Build From Source](#build-from-source)
 
 ## Installation
@@ -68,7 +72,7 @@ Before building myPod from source, ensure you have the following installed:
 
 - **Node.js** (v18 or higher recommended)
 - **npm** (comes with Node.js)
-- **Build tools** for native dependencies:
+- **Build tools** for native dependencies (only for building the full app, not required for testing):
   - **macOS**: Xcode Command Line Tools (`xcode-select --install`)
   - **Linux**: `build-essential` or equivalent
   - **Windows**: Visual Studio Build Tools or Visual Studio with C++ workload
@@ -87,7 +91,7 @@ Before building myPod from source, ensure you have the following installed:
    ```
 
 3. **Development mode**
-   To run the app in development mode with hot reload:
+   To run the app in development mode with hot reload. If you just want to test the app, you can stop here:
    ```bash
    npm run dev
    ```
