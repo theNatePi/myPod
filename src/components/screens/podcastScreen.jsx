@@ -9,6 +9,18 @@ function PodcastScreen({ selectedPodcast, setSelectedEpisode, dispatch }) {
   const [episodes, setEpisodes] = useState([]);
   const [selectedEpisodeIndex, setSelectedEpisodeIndex] = useState(0);
 
+  const [confirmRemovePodcast, setConfirmRemovePodcast] = useState(false);
+
+  const handleRemovePodcast = async () => {
+    if (!confirmRemovePodcast) {
+      setConfirmRemovePodcast(true);
+      return;
+    }
+
+    await window.podcasts.removeFeed(selectedPodcast.feed_url);
+    dispatch({ type: 'POP' });
+  };
+
   const maxEpisodeIndex = Math.max(episodes.length - 1, 0);
   const activeSelectedEpisodeIndex = episodes.length === 0
     ? -1
@@ -29,6 +41,10 @@ function PodcastScreen({ selectedPodcast, setSelectedEpisode, dispatch }) {
 
         const episodesList = await window.podcasts.listEpisodes(selectedPodcast.feed_url);
         setEpisodes(episodesList);
+        if (episodesList.length > 0) {
+          // Skip the "remove podcast" item
+          setSelectedEpisodeIndex(1);
+        }
       } catch (error) {
         console.error('Error fetching episodes:', error);
       } finally {
@@ -82,16 +98,26 @@ function PodcastScreen({ selectedPodcast, setSelectedEpisode, dispatch }) {
           <ListContainer
             selectedIndex={activeSelectedEpisodeIndex}
             onSelectionChange={(nextIndex) => {
+              setConfirmRemovePodcast(false);
               if (episodes.length === 0) return;
               setSelectedEpisodeIndex(Math.max(0, Math.min(nextIndex, maxEpisodeIndex)));
             }}
             onEnter={(index) => {
-              const selectedEpisodeItem = episodes[index];
+              if (index === 0) {
+                handleRemovePodcast();
+                return;
+              }
+              const selectedEpisodeItem = episodes[index-1];
               if (!selectedEpisodeItem) return;
               setSelectedEpisode(selectedEpisodeItem);
               dispatch({ type: 'PUSH', screen: SCREENS.EPISODE });
             }}
           >
+            <ListItem
+              text={confirmRemovePodcast ? "- Confirm?" : "- Remove Podcast"}
+              onClick={handleRemovePodcast}
+              isSelected={activeSelectedEpisodeIndex === 0}
+            />
             {episodes.map((episode, index) => (
               <ListItem
                 key={episode.id}
@@ -100,7 +126,7 @@ function PodcastScreen({ selectedPodcast, setSelectedEpisode, dispatch }) {
                   setSelectedEpisode(episode);
                   dispatch({ type: 'PUSH', screen: SCREENS.EPISODE });
                 }}
-                isSelected={index === activeSelectedEpisodeIndex}
+                isSelected={index === activeSelectedEpisodeIndex - 1}
                 showBlueAlert={episode.progress === 0}
               />
             ))}
