@@ -127,7 +127,7 @@ function PodcastScreen({ selectedPodcast, setSelectedEpisode, dispatch }) {
                   dispatch({ type: 'PUSH', screen: SCREENS.EPISODE });
                 }}
                 isSelected={index === activeSelectedEpisodeIndex - 1}
-                showBlueAlert={episode.progress === 0}
+                showAlert={episode.progress === 0}
               />
             ))}
           </ListContainer>

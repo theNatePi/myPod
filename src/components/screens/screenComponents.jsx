@@ -1,5 +1,6 @@
 import { Children, useEffect, useRef } from 'react';
 import BlueAlertIcon from './../../assets/blue-alert.svg?react';
+import GreyAlertIcon from './../../assets/grey-alert.svg?react';
 
 function ListContainer({ children, selectedIndex, onSelectionChange, onEnter, style = {} }) {
   const containerRef = useRef(null);
@@ -70,7 +71,7 @@ function ListContainer({ children, selectedIndex, onSelectionChange, onEnter, st
   );
 }
 
-function ListItem({text, onClick, isSelected, showBlueAlert = false}) {
+function ListItem({text, onClick, isSelected, showAlert = false}) {
   return (
     <div    
       style={{
@@ -108,11 +109,16 @@ function ListItem({text, onClick, isSelected, showBlueAlert = false}) {
           justifyContent: 'center',
         }}
       >
-        {/* <BlueAlertIcon style={{ width: '10px', height: '10px' }} /> */}
-        {showBlueAlert && <BlueAlertIcon style={{ width: '10px', height: '10px' }} />}
+        {showAlert && (
+          isSelected ? (
+            <GreyAlertIcon style={{ width: '10px', height: '10px' }} />
+          ) : (
+            <BlueAlertIcon style={{ width: '10px', height: '10px' }} />
+          )
+        )}
       </div>
     </div>
-  )
+  );
 }
 
 export { ListContainer, ListItem };
