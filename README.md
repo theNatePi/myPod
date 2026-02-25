@@ -15,7 +15,7 @@
         <li>Indication of new/in progress episodes</li>
         <li>Caching and interval updates of all content</li>
       </ul>
-      <p>.</p>
+      <a href="https://youtu.be/2hv2Y2gY2DE">Video Demo</a>
       <p>This app was build for, and only tested on, macOS</p>
     </td>
   </tr>
